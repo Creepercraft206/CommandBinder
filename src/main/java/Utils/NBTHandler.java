@@ -1,7 +1,6 @@
 package Utils;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -11,31 +10,30 @@ import java.util.Objects;
 
 public class NBTHandler {
 
-    private final CommandBuilder commandBuilder;
-
-    public NBTHandler(Player p) {
-        commandBuilder = new CommandBuilder(p, getCmdArray(p.getInventory().getItemInMainHand()));
-
+    public NBTHandler() {
     }
 
     public void addCommand(ItemStack item, String cmd) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("CBCmd" + getHighestId(item)), PersistentDataType.STRING, cmd);
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + getHighestId(item)), PersistentDataType.STRING, cmd);
+            item.setItemMeta(itemMeta);
         }
     }
 
     public void removeCommand(ItemStack item, int id) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("CBCmd" + id));
+            itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcmd" + id));
+            item.setItemMeta(itemMeta);
 
             // Arrange new cmd-order
             int highestId = getHighestId(item);
-            for (int i = id; i <= highestId; i++) {
-                if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("CBCmd" + (i + 1)), PersistentDataType.STRING)) {
-                    itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("CBCmd" + i), PersistentDataType.STRING, Objects.requireNonNull(getCommand(item, id)));
-                    itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("CBCmd" + (i + 1)));
+            for (int i = id; i < highestId; i++) {
+                if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcmd" + (i + 1)), PersistentDataType.STRING)) {
+                    itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + i), PersistentDataType.STRING, Objects.requireNonNull(getCommand(item, id)));
+                    itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcmd" + (i + 1)));
+                    item.setItemMeta(itemMeta);
                 }
             }
         }
@@ -46,7 +44,7 @@ public class NBTHandler {
         if (itemMeta != null) {
             int id = 1;
             while (true) {
-                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("CBCmd" + id), PersistentDataType.STRING)) {
+                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING)) {
                     return id;
                 } else {
                     id++;
@@ -59,7 +57,7 @@ public class NBTHandler {
     public String getCommand(ItemStack item, int id) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
-            return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("CBCmd" + id), PersistentDataType.STRING);
+            return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING);
         }
         return null;
     }
@@ -70,10 +68,10 @@ public class NBTHandler {
         if (itemMeta != null) {
             int id = 1;
             while (true) {
-                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("CBCmd" + id), PersistentDataType.STRING)) {
+                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING)) {
                     return cmds;
                 } else {
-                    cmds.add(itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("CBCmd" + id), PersistentDataType.STRING));
+                    cmds.add(itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING));
                     id++;
                 }
             }

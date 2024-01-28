@@ -113,7 +113,7 @@ public class CommandBuilder {
         }
     }
 
-    public void runCode() {
+    public void runCommands() {
         replacePlaceholders();
         for (int i = 0; i < cmds.size(); i++) {
             if (cmds.get(i).startsWith("!wait")) {

@@ -1,13 +1,13 @@
 package Commands;
 
-import org.bukkit.NamespacedKey;
+import de.hgpractice.commandbinder.CommandBinder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+
+import java.util.Arrays;
 
 public class CommandBinderCmd implements CommandExecutor {
 
@@ -63,12 +63,42 @@ public class CommandBinderCmd implements CommandExecutor {
                     if (args.length > 1) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
-                            ItemMeta itemMeta = item.getItemMeta();
-                            if (itemMeta != null) {
-                                String type = (String) itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("type"), PersistentDataType.STRING);
-                            }
+                            String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                            CommandBinder.getInstance().nbtHandlers.get(p).addCommand(item, commandWithArgs);
                         }
+                    } else {
+                        p.sendMessage("§c/cb add <command>");
                     }
+                } else {
+                    p.sendMessage("§cYou do not have permission to use this command!");
+                }
+            } else if (args[0].equals("remove")) {
+                if (p.hasPermission("commandbinder.remove")) {
+                    if (args.length == 2) {
+                        if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                            ItemStack item = p.getInventory().getItemInMainHand();
+                            CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
+                        }
+                    } else {
+                        p.sendMessage("§c/cb remove <id>");
+                    }
+                } else {
+                    p.sendMessage("§cYou do not have permission to use this command!");
+                }
+            } else if (args[0].equals("list")) {
+                if (p.hasPermission("commandbinder.list")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        p.sendMessage("§7§m------------------------------------");
+                        p.sendMessage("§6§lCommandBinder §7- §fCommands");
+                        p.sendMessage("§7§m------------------------------------");
+                        for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
+                            p.sendMessage("§6§l" + i + " §7- §f" + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                        }
+                        p.sendMessage("§7§m------------------------------------");
+                    }
+                } else {
+                    p.sendMessage("§cYou do not have permission to use this command!");
                 }
             }
         }
