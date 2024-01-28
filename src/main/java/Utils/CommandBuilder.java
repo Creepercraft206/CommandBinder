@@ -8,18 +8,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class CommandBuilder {
 
     private final Player p;
     private final Date date = new Date();
+    private TimeZone timeZone;
+    private final Calendar cal = Calendar.getInstance();
     private final ArrayList<String> cmds = new ArrayList<>();
 
     public CommandBuilder(Player p, ArrayList<String> cmds) {
         this.p = p;
         this.cmds.addAll(cmds);
+        timeZone = TimeZone.getTimeZone(ZoneId.systemDefault());
+        cal.setTimeZone(timeZone);
     }
 
     @SuppressWarnings("deprecation")
@@ -57,40 +64,40 @@ public class CommandBuilder {
                 cmd = cmd.replace("%amount%", String.valueOf(p.getInventory().getItemInMainHand().getAmount()));
             }
             if (cmd.contains("%slot%")) {
-                cmd = cmd.replace("%slot%", String.valueOf(p.getInventory().getHeldItemSlot()));
+                cmd = cmd.replace("%slot%", String.valueOf(p.getInventory().getHeldItemSlot() + 1));
             }
             if (cmd.contains("%durability%")) {
-                cmd = cmd.replace("%durability%", String.valueOf(p.getInventory().getItemInMainHand().getDurability()));
+                cmd = cmd.replace("%durability%", String.valueOf(p.getInventory().getItemInMainHand().getType().getMaxDurability() - p.getInventory().getItemInMainHand().getDurability()));
             }
             if (cmd.contains("%playersOnline%")) {
                 cmd = cmd.replace("%playersOnline%", String.valueOf(Bukkit.getOnlinePlayers().size()));
             }
             if (cmd.contains("%block%")) {
-                cmd = cmd.replace("%block%", p.getEyeLocation().getBlock().getType().toString());
+                cmd = cmd.replace("%block%", p.getTargetBlock(null, 128).getType().toString());
             }
             if (cmd.contains("%lookingAt%")) {
                 if (p.getEyeLocation().getBlock().getType() != Material.AIR) {
-                    Location loc = p.getEyeLocation().getBlock().getLocation();
+                    Location loc = p.getTargetBlock(null, 128).getLocation();
                     cmd = cmd.replace("%lookingAt%", loc.getX() + " " + loc.getY() + " " + loc.getZ());
                 }
             }
             if (cmd.contains("%year%")) {
-                cmd = cmd.replace("%year%", String.valueOf(date.getYear()));
+                cmd = cmd.replace("%year%", String.valueOf(cal.get(Calendar.YEAR)));
             }
             if (cmd.contains("%month%")) {
-                cmd = cmd.replace("%month%", String.valueOf(date.getMonth()));
+                cmd = cmd.replace("%month%", String.valueOf(cal.get(Calendar.MONTH)));
             }
             if (cmd.contains("%day%")) {
-                cmd = cmd.replace("%day%", String.valueOf(date.getDay()));
+                cmd = cmd.replace("%day%", String.valueOf(cal.get(Calendar.DAY_OF_MONTH) + 1));
             }
             if (cmd.contains("%hour%")) {
-                cmd = cmd.replace("%hour%", String.valueOf(date.getHours()));
+                cmd = cmd.replace("%hour%", String.valueOf(cal.get(Calendar.HOUR_OF_DAY)));
             }
             if (cmd.contains("%minute%")) {
-                cmd = cmd.replace("%minute%", String.valueOf(date.getMinutes()));
+                cmd = cmd.replace("%minute%", String.valueOf(cal.get(Calendar.MINUTE)));
             }
             if (cmd.contains("%second%")) {
-                cmd = cmd.replace("%second%", String.valueOf(date.getSeconds()));
+                cmd = cmd.replace("%second%", String.valueOf(cal.get(Calendar.SECOND)));
             }
             replacedList.add(cmd);
         }
