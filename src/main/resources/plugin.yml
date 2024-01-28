@@ -1,0 +1,4 @@
+name: CommandBinder
+version: '${project.version}'
+main: de.hgpractice.commandbinder.CommandBinder
+api-version: '1.20'
