@@ -5,6 +5,7 @@ import de.hgpractice.commandbinder.CommandBinder;
 public class Messages {
 
     public static String prefix = "§7» §3CommandBinder §8× §7";
+    public static String invalidSession = prefix + "§cSession wurde nicht gefunden! Logge dich neu ein!";
 
     // ------------------ CommandOutput ------------------ //
     public static String cmdAdded = prefix + "Der §3Befehl §7wurde erfolgreich §3hinzugefügt§7!";

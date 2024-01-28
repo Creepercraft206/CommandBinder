@@ -4,6 +4,7 @@ import Commands.CommandBinderCmd;
 import Listeners.ItemInteractListener;
 import Listeners.JoinListener;
 import Utils.NBTHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +34,13 @@ public final class CommandBinder extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemInteractListener(), this);
         // ------------------ Listeners ------------------ //
 
+        // --------- Refresh sessions after reload -------- //
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            if (all.hasPermission("commandbinder.add") || all.hasPermission("commandbinder.remove") || all.hasPermission("commandbinder.list")) {
+                CommandBinder.getInstance().nbtHandlers.put(all, new NBTHandler());
+            }
+        }
+        // --------- Refresh sessions after reload -------- //
     }
 
     @Override

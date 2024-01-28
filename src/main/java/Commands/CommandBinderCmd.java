@@ -40,8 +40,12 @@ public class CommandBinderCmd implements CommandExecutor {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                            CommandBinder.getInstance().nbtHandlers.get(p).addCommand(item, commandWithArgs);
-                            p.sendMessage(Messages.cmdAdded);
+                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
+                                CommandBinder.getInstance().nbtHandlers.get(p).addCommand(item, commandWithArgs);
+                                p.sendMessage(Messages.cmdAdded);
+                            } else {
+                                p.sendMessage(Messages.invalidSession);
+                            }
                         }
                     } else {
                         p.sendMessage(Messages.usageAdd);
@@ -54,8 +58,12 @@ public class CommandBinderCmd implements CommandExecutor {
                     if (args.length == 2) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
-                            CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
-                            p.sendMessage(Messages.cmdRemoved);
+                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
+                                CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
+                                p.sendMessage(Messages.cmdRemoved);
+                            } else {
+                                p.sendMessage(Messages.invalidSession);
+                            }
                         }
                     } else {
                         p.sendMessage(Messages.usageRemove);
@@ -68,12 +76,16 @@ public class CommandBinderCmd implements CommandExecutor {
                     if (p.getInventory().getItemInMainHand().getType().isItem()) {
                         ItemStack item = p.getInventory().getItemInMainHand();
                         p.sendMessage(Messages.listHeader);
-                        for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
-                            if (i % 2 == 0) {
-                                p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
-                            } else {
-                                p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                        if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
+                            for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
+                                if (i % 2 == 0) {
+                                    p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                                } else {
+                                    p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                                }
                             }
+                        } else {
+                            p.sendMessage(Messages.invalidSession);
                         }
                     }
                 } else {
