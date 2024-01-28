@@ -16,7 +16,7 @@ public class CommandBinderCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String string, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (args[0].equals("help")) {
+            if (args.length == 0 || args[0].equals("help")) {
                 if (p.hasPermission("commandbinder.help")) {
                     p.sendMessage(Messages.helpText);
                 } else {

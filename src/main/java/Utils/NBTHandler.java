@@ -24,18 +24,18 @@ public class NBTHandler {
     public void removeCommand(ItemStack item, int id) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcmd" + id));
-            item.setItemMeta(itemMeta);
-
-            // Arrange new cmd-order
-            int highestId = getHighestId(item);
-            for (int i = id; i < highestId; i++) {
-                if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcmd" + (i + 1)), PersistentDataType.STRING)) {
-                    itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + i), PersistentDataType.STRING, Objects.requireNonNull(getCommand(item, id)));
-                    itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcmd" + (i + 1)));
-                    item.setItemMeta(itemMeta);
-                }
+            ArrayList<String> cmds = getCmdArray(item);
+            if (id < cmds.size()) {
+                cmds.remove(id - 1);
             }
+            for (int i = 1; i < cmds.size() + 2; i++) {
+                itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcmd" + i));
+            }
+
+            for (int i = 0; i < cmds.size(); i++) {
+                itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (i + 1)), PersistentDataType.STRING, cmds.get(i));
+            }
+            item.setItemMeta(itemMeta);
         }
     }
 
