@@ -52,9 +52,9 @@ public class Messages {
             "§8× §3%minute% §8» §7Die aktuelle Minute\n" +
             "§8× §3%second% §8» §7Die aktuelle Sekunde";
     public static String customCmdsText = prefix + "CustomCommands\n" +
-            "§8× §7!wait <Sekunden> §8» §7Wartet x Sekunden vor Ausführung des nächsten Befehls\n" +
-            "§8× §7!repeat <Anzahl> §8» §7Führt die Nachfolgenden Befehle x Mal aus.\n" +
-            "§8× §7!endrepeat §8» §7Legt das Ende eines !repeat-Befehls fest.";
+            "§8× §3!wait <Sekunden> §8» §7Wartet x Sekunden vor Ausführung des nächsten Befehls\n" +
+            "§8× §3!repeat <Anzahl> §8» §7Führt die Nachfolgenden Befehle x Mal aus.\n" +
+            "§8× §3!endrepeat §8» §7Legt das Ende eines !repeat-Befehls fest.";
 
     // ------------------ CommandOutput ------------------ //
 

@@ -27,6 +27,7 @@ public final class CommandBinder extends JavaPlugin {
 
         // ------------------ Commands ------------------ //
         getCommand("commandbinder").setExecutor(new CommandBinderCmd());
+        getCommand("commandbinder").setTabCompleter(new CommandBinderCmd());
         // ------------------ Commands ------------------ //
 
         // ------------------ Listeners ------------------ //

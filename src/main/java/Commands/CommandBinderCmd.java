@@ -5,12 +5,15 @@ import de.hgpractice.commandbinder.CommandBinder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class CommandBinderCmd implements CommandExecutor {
+public class CommandBinderCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String string, String[] args) {
@@ -137,5 +140,23 @@ public class CommandBinderCmd implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String string, String[] args) {
+        ArrayList<String> completions = new ArrayList<>();
+        if (args.length == 1) {
+            completions.add("help");
+            completions.add("add");
+            completions.add("remove");
+            completions.add("insert");
+            completions.add("list");
+            completions.add("placeholders");
+            completions.add("info");
+            completions.add("customcommands");
+            completions.add("customcmds");
+            completions.add("ccmds");
+        }
+        return completions;
     }
 }
