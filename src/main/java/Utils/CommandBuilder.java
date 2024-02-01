@@ -97,99 +97,6 @@ public class CommandBuilder {
         return cmd;
     }
 
-
-    /*
-    private void repeatCode(ArrayList<String> code, int times) {
-        for (int i = 0; i < times; i++) {
-            for (int j = 0; j < code.size(); j++) {
-                dispatchCmds(current + j);
-            }
-        }
-        continueCmds();
-    }
-
-    private void dispatchCmds(int index) {
-        if (cmds.get(index).startsWith("!wait")) {
-            String[] split = cmds.get(index).split(" ");
-            int delay = Integer.parseInt(split[1]);
-            delayCode(delay);
-        } else if (cmds.get(index).startsWith("!repeat")) {
-            int end = 0;
-            for (int i = current + 1; i < cmds.size(); i++) {
-                if (cmds.get(i).startsWith("!endrepeat")) {
-                    end = i;
-                    break;
-                }
-            }
-            String[] split = cmds.get(index).split(" ");
-            int times = Integer.parseInt(split[1]);
-            ArrayList<String> repeatCmds = new ArrayList<>();
-            for (int i = index + 2; i < end; i++) {
-                repeatCmds.add(cmds.get(i));
-            }
-            repeatCode(repeatCmds, times);
-        } else {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmds.get(index));
-            current++;
-        }
-    }
-    --------------------------------------------
-
-    int current = 0;
-    public void startCmds() {
-        dispatchCmd();
-    }
-
-    private void dispatchCmd() {
-        if (current >= cmds.size()) {
-            return;
-        }
-
-        String cmd = cmds.get(current);
-        if (cmd.startsWith("!wait")) {
-            String[] split = cmd.split(" ");
-            int delay = Integer.parseInt(split[1]);
-            delayCode(delay);
-        } else if (cmd.startsWith("!repeat")) {
-            String[] split = cmd.split(" ");
-            int times = Integer.parseInt(split[1]);
-            int end = cmds.indexOf("!endrepeat") - current;
-            if (end != -1) {
-                ArrayList<String> repeatCmds = new ArrayList<>(cmds.subList(current + 1, end));
-                repeatCode(repeatCmds, times);
-                current = cmds.indexOf("!endrepeat");
-            }
-        } else {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-        }
-        current++;
-        dispatchCmd();
-    }
-
-    private void delayCode(int delay) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                dispatchCmd();
-            }
-        }.runTaskLater(CommandBinder.getInstance(), delay);
-    }
-
-    private void repeatCode(ArrayList<String> code, int times) {
-        for (int i = 0; i < times; i++) {
-            for (String cmd : code) {
-                if (cmd.startsWith("!wait")) {
-                    String[] split = cmd.split(" ");
-                    int delay = Integer.parseInt(split[1]);
-                    delayCode(delay);
-                } else {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-                }
-            }
-        }
-    }
-     */
-
     public void startCmds() {
         executeNextCmd();
     }
@@ -219,7 +126,7 @@ public class CommandBuilder {
             public void run() {
                 executeNextCmd();
             }
-        }.runTaskLater(CommandBinder.getInstance(), delay);
+        }.runTaskLater(CommandBinder.getInstance(), delay * 20L);
     }
 
     private void repeatCode(int times) {

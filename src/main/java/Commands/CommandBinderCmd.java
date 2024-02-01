@@ -34,7 +34,13 @@ public class CommandBinderCmd implements CommandExecutor {
                 } else {
                     p.sendMessage(Messages.noPerms);
                 }
-            } else if (args[0].equals("add")) {
+            } else if (args[0].equals("customcommands") || args[0].equals("customcmds") || args[0].equals("ccmds")) {
+                if (p.hasPermission("commandbinder.customcmds")) {
+                    p.sendMessage(Messages.customCmdsText);
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+        } else if (args[0].equals("add")) {
                 if (p.hasPermission("commandbinder.add")) {
                     if (args.length > 1) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {

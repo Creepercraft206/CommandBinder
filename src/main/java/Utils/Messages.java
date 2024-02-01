@@ -19,6 +19,7 @@ public class Messages {
             "§8× §7/commandbinder remove <ID> §8» §7Entfernt einen Befehl.\n" +
             "§8× §7/commandbinder list §8» §7Listet alle Befehle auf.\n" +
             "§8× §7/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
+            "§8× §7/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
             "§8× §7/commandbinder help §8» §7Zeigt diese Hilfe an.\n" +
             "§8× §7/commandbinder info §8» §7Zeigt Informationen über das Plugin an.";
     public static String infoText = prefix + "Info\n" +
@@ -49,6 +50,10 @@ public class Messages {
             "§8× §3%hour% §8» §7Die aktuelle Stunde\n" +
             "§8× §3%minute% §8» §7Die aktuelle Minute\n" +
             "§8× §3%second% §8» §7Die aktuelle Sekunde";
+    public static String customCmdsText = prefix + "CustomCommands\n" +
+            "§8× §7!wait <Sekunden> §8» §7Wartet x Sekunden vor Ausführung des nächsten Befehls\n" +
+            "§8× §7!repeat <Anzahl> §8» §7Führt die Nachfolgenden Befehle x Mal aus.\n" +
+            "§8× §7!endrepeat §8» §7Legt das Ende eines !repeat-Befehls fest.";
 
     // ------------------ CommandOutput ------------------ //
 
