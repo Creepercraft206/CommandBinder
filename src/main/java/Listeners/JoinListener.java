@@ -13,7 +13,7 @@ public class JoinListener implements Listener {
     @EventHandler
     private void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (p.hasPermission("commandbinder.add") || p.hasPermission("commandbinder.remove") || p.hasPermission("commandbinder.list")) {
+        if (p.hasPermission("commandbinder.add") || p.hasPermission("commandbinder.remove") || p.hasPermission("commandbinder.list") || p.hasPermission("commandbinder.insert")) {
             CommandBinder.getInstance().nbtHandlers.put(p, new NBTHandler());
         }
     }

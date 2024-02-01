@@ -10,6 +10,7 @@ public class Messages {
     // ------------------ CommandOutput ------------------ //
     public static String cmdAdded = prefix + "Der §3Befehl §7wurde erfolgreich §3hinzugefügt§7!";
     public static String cmdRemoved = prefix + "Der §3Befehl §7wurde erfolgreich §3entfernt§7!";
+    public static String cmdInserted = prefix + "Der §3Befehl §7wurde erfolgreich §3eingefügt§7!";
     public static String listHeader = prefix + "§3Commands:";
     public static String listItemOdd = "§7× §9";
     public static String listItemEven = "§7× §b";
@@ -65,8 +66,8 @@ public class Messages {
     // ------------------- ErrorOutput ------------------- //
 
     // --------------------- Usage ----------------------- //
-    public static String usage = prefix + "§7Verwendung: §7/commandbinder <add/remove/list/help/placeholders>";
     public static String usageAdd = prefix + "§7Verwendung: §7/commandbinder add <Befehl>";
     public static String usageRemove = prefix + "§7Verwendung: §7/commandbinder remove <ID>";
+    public static String usageInsert = prefix + "§7Verwendung: §7/commandbinder insert <ID> <Befehl>";
     // --------------------- Usage ----------------------- //
 }

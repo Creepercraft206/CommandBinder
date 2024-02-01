@@ -38,6 +38,18 @@ public class NBTHandler {
         }
     }
 
+    public void insertCommand(ItemStack item, int id, String cmd) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            ArrayList<String> cmds = getCmdArray(item);
+            for (int i = cmds.size() - 1; i >= id; i--) {
+                itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (i + 2)), PersistentDataType.STRING, cmds.get(i));
+            }
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (id + 1)), PersistentDataType.STRING, cmd);
+            item.setItemMeta(itemMeta);
+        }
+    }
+
     public int getHighestId(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {

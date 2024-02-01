@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.time.ZoneId;
 import java.util.*;
@@ -27,7 +26,6 @@ public class CommandBuilder {
 
     @SuppressWarnings("deprecation")
     private String replacePlaceholders(String cmd) {
-        ArrayList<String> replacedList = new ArrayList<>();
         if (cmd.contains("%player%")) {
             cmd = cmd.replace("%player%", p.getName());
         }

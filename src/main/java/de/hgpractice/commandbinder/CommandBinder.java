@@ -36,7 +36,7 @@ public final class CommandBinder extends JavaPlugin {
 
         // --------- Refresh sessions after reload -------- //
         for (Player all : Bukkit.getOnlinePlayers()) {
-            if (all.hasPermission("commandbinder.add") || all.hasPermission("commandbinder.remove") || all.hasPermission("commandbinder.list")) {
+            if (all.hasPermission("commandbinder.add") || all.hasPermission("commandbinder.remove") || all.hasPermission("commandbinder.list") || all.hasPermission("commandbinder.insert")) {
                 CommandBinder.getInstance().nbtHandlers.put(all, new NBTHandler());
             }
         }

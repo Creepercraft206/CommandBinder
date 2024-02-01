@@ -40,7 +40,7 @@ public class CommandBinderCmd implements CommandExecutor {
                 } else {
                     p.sendMessage(Messages.noPerms);
                 }
-        } else if (args[0].equals("add")) {
+            } else if (args[0].equals("add")) {
                 if (p.hasPermission("commandbinder.add")) {
                     if (args.length > 1) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
@@ -52,6 +52,8 @@ public class CommandBinderCmd implements CommandExecutor {
                             } else {
                                 p.sendMessage(Messages.invalidSession);
                             }
+                        } else {
+                            p.sendMessage(Messages.noItem);
                         }
                     } else {
                         p.sendMessage(Messages.usageAdd);
@@ -65,11 +67,17 @@ public class CommandBinderCmd implements CommandExecutor {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                                CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
-                                p.sendMessage(Messages.cmdRemoved);
+                                if (Integer.parseInt(args[1]) <= CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) && Integer.parseInt(args[1]) > 0) {
+                                    CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
+                                    p.sendMessage(Messages.cmdRemoved);
+                                } else {
+                                    p.sendMessage(Messages.invalidId);
+                                }
                             } else {
                                 p.sendMessage(Messages.invalidSession);
                             }
+                        } else {
+                            p.sendMessage(Messages.noItem);
                         }
                     } else {
                         p.sendMessage(Messages.usageRemove);
@@ -77,22 +85,51 @@ public class CommandBinderCmd implements CommandExecutor {
                 } else {
                     p.sendMessage(Messages.noPerms);
                 }
+            } else if (args[0].equals("insert")) {
+                if (p.hasPermission("commandbinder.insert")) {
+                    if (args.length > 2) {
+                        if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                            ItemStack item = p.getInventory().getItemInMainHand();
+                            String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
+                                if (Integer.parseInt(args[1]) < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) && Integer.parseInt(args[1]) >= 0) {
+                                    CommandBinder.getInstance().nbtHandlers.get(p).insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
+                                    p.sendMessage(Messages.cmdInserted);
+                                } else {
+                                    p.sendMessage(Messages.invalidId);
+                                }
+                            } else {
+                                p.sendMessage(Messages.invalidSession);
+                            }
+                        } else {
+                            p.sendMessage(Messages.noItem);
+                        }
+                    } else {
+                        p.sendMessage(Messages.usageInsert);
+                    }
+                }
             } else if (args[0].equals("list")) {
                 if (p.hasPermission("commandbinder.list")) {
                     if (p.getInventory().getItemInMainHand().getType().isItem()) {
                         ItemStack item = p.getInventory().getItemInMainHand();
                         p.sendMessage(Messages.listHeader);
                         if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                            for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
-                                if (i % 2 == 0) {
-                                    p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
-                                } else {
-                                    p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                            if (CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) != 0) {
+                                for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
+                                    if (i % 2 == 0) {
+                                        p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                                    } else {
+                                        p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
+                                    }
                                 }
+                            } else {
+                                p.sendMessage(Messages.noCmds);
                             }
                         } else {
                             p.sendMessage(Messages.invalidSession);
                         }
+                    } else {
+                        p.sendMessage(Messages.noItem);
                     }
                 } else {
                     p.sendMessage(Messages.noPerms);
