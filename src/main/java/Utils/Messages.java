@@ -18,6 +18,7 @@ public class Messages {
     public static String helpText = prefix + "Help\n" +
             "§8× §7/commandbinder add <Befehl> §8» §7Fügt einen Befehl hinzu.\n" +
             "§8× §7/commandbinder remove <ID> §8» §7Entfernt einen Befehl.\n" +
+            "§8× §7/commandbinder insert <ID> <Befehl> §8» §7Fügt einen Befehl an einer bestimmten Stelle hinzu.\n" +
             "§8× §7/commandbinder list §8» §7Listet alle Befehle auf.\n" +
             "§8× §7/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
             "§8× §7/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
@@ -27,7 +28,7 @@ public class Messages {
             "§8× §3Version: §8» §7" + CommandBinder.getInstance().getDescription().getVersion() + "\n" +
             "§8× §3Author: §8» §7" + CommandBinder.getInstance().getDescription().getAuthors().get(0) + "\n" +
             "§8× §3Source: §8» §7https://github.com/Creepercraft206/CommandBinder\n" +
-            "§8× §3Spigot: §8» §7Soon\n" +
+            "§8× §3Spigot: §8» §7https://www.spigotmc.org/resources/commandbinder.114872/\n" +
             "§8× §7Plugin-Idee basierend auf dem CommandBinder-Plugin der NeruxVace.de PServer.";
     public static String placeholderText = prefix + "Placeholders\n" +
             "§8× §3%player% §8» §7Der Name des Spielers\n" +
