@@ -5,13 +5,15 @@ import de.hgpractice.commandbinder.CommandBinder;
 public class Messages {
 
     public static String prefix = "§7» §3CommandBinder §8× §7";
-    public static String invalidSession = prefix + "§cSession wurde nicht gefunden! Logge dich neu ein!";
 
     // ------------------ CommandOutput ------------------ //
     public static String cmdAdded = prefix + "Der §3Befehl §7wurde erfolgreich §3hinzugefügt§7!";
     public static String cmdRemoved = prefix + "Der §3Befehl §7wurde erfolgreich §3entfernt§7!";
     public static String cmdInserted = prefix + "Der §3Befehl §7wurde erfolgreich §3eingefügt§7!";
+    public static String permAdded = prefix + "Die §3Permission §7wurde erfolgreich §3hinzugefügt§7!";
+    public static String permRemoved = prefix + "Die §3Permission §7wurde erfolgreich §3entfernt§7!";
     public static String listHeader = prefix + "§3Commands:";
+    public static String listPermHeader = prefix + "§3Permissions:";
     public static String listItemOdd = "§7× §9";
     public static String listItemEven = "§7× §b";
     public static String listItemPlaceholder = " §8» §7";
@@ -20,6 +22,9 @@ public class Messages {
             "§8× §7/commandbinder remove <ID> §8» §7Entfernt einen Befehl.\n" +
             "§8× §7/commandbinder insert <ID> <Befehl> §8» §7Fügt einen Befehl an einer bestimmten Stelle hinzu.\n" +
             "§8× §7/commandbinder list §8» §7Listet alle Befehle auf.\n" +
+            "§8× §7/commandbinder addperm <Permission> §8» §7Fügt eine Permission hinzu.\n" +
+            "§8× §7/commandbinder removeperm <Permission> §8» §7Entfernt eine Permission.\n" +
+            "§8× §7/commandbinder listperms §8» §7Zeigt alle Permissions eines Items.\n" +
             "§8× §7/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
             "§8× §7/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
             "§8× §7/commandbinder help §8» §7Zeigt diese Hilfe an.\n" +
@@ -70,5 +75,7 @@ public class Messages {
     public static String usageAdd = prefix + "§7Verwendung: §7/commandbinder add <Befehl>";
     public static String usageRemove = prefix + "§7Verwendung: §7/commandbinder remove <ID>";
     public static String usageInsert = prefix + "§7Verwendung: §7/commandbinder insert <ID> <Befehl>";
+    public static String usageAddPerm = prefix + "§7Verwendung: §7/commandbinder addperm <Permission>";
+    public static String usageRemovePerm = prefix + "§7Verwendung: §7/commandbinder removeperm <Permission>";
     // --------------------- Usage ----------------------- //
 }

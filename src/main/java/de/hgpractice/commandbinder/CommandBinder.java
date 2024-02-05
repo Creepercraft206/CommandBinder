@@ -2,13 +2,11 @@ package de.hgpractice.commandbinder;
 
 import Commands.CommandBinderCmd;
 import Listeners.ItemInteractListener;
-import Listeners.JoinListener;
+import Utils.SQL.ConfigHandler;
 import Utils.NBTHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import Utils.SQL.PermissionSystemHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class CommandBinder extends JavaPlugin {
@@ -19,11 +17,48 @@ public final class CommandBinder extends JavaPlugin {
         return instance;
     }
 
-    public HashMap<Player, NBTHandler> nbtHandlers = new HashMap<>();
+    private static NBTHandler nbtHandler;
+    public static NBTHandler getNbtHandler() {
+        return nbtHandler;
+    }
+
+    private static ConfigHandler permsConfig;
+    public static ConfigHandler getPermsConfig() {
+        return permsConfig;
+    }
+
+    private static PermissionSystemHandler pSysHandler;
+    public static PermissionSystemHandler getPermissionSystemHandler() {
+        return pSysHandler;
+    }
 
     @Override
     public void onEnable() {
         instance = this;
+        nbtHandler = new NBTHandler();
+
+        // ------------------ Configs ------------------ //
+        HashMap<String, Object> settings = new HashMap<>();
+        settings.put("Host", "localhost");
+        settings.put("Port", "3306");
+        settings.put("Database", "yourDatabase");
+        settings.put("Username", "yourUsername");
+        settings.put("Password", "yourPassword");
+        settings.put("Table_User_Permissions", "yourTable");
+        settings.put("Column_UUID", "yourColumn");
+        settings.put("Column_Permissions", "yourColumn");
+        permsConfig = new ConfigHandler("CommandBinder", "PermissionSystem", settings);
+        // ------------------ Configs ------------------ //
+
+        // ------------- Permission System ------------- //
+        pSysHandler = new PermissionSystemHandler(
+                permsConfig.getConfigSetting("Host"),
+                permsConfig.getConfigSetting("Port"),
+                permsConfig.getConfigSetting("Database"),
+                permsConfig.getConfigSetting("Username"),
+                permsConfig.getConfigSetting("Password")
+        );
+        // ------------- Permission System ------------- //
 
         // ------------------ Commands ------------------ //
         getCommand("commandbinder").setExecutor(new CommandBinderCmd());
@@ -31,21 +66,12 @@ public final class CommandBinder extends JavaPlugin {
         // ------------------ Commands ------------------ //
 
         // ------------------ Listeners ------------------ //
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new ItemInteractListener(), this);
         // ------------------ Listeners ------------------ //
-
-        // --------- Refresh sessions after reload -------- //
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (all.hasPermission("commandbinder.add") || all.hasPermission("commandbinder.remove") || all.hasPermission("commandbinder.list") || all.hasPermission("commandbinder.insert")) {
-                CommandBinder.getInstance().nbtHandlers.put(all, new NBTHandler());
-            }
-        }
-        // --------- Refresh sessions after reload -------- //
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        pSysHandler.close();
     }
 }

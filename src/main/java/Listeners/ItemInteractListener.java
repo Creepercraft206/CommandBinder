@@ -19,7 +19,7 @@ public class ItemInteractListener implements Listener {
         if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("cbcmd1"))) {
             if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 e.setCancelled(true);
-                CommandBuilder builder = new CommandBuilder(p, CommandBinder.getInstance().nbtHandlers.get(p).getCmdArray(item));
+                CommandBuilder builder = new CommandBuilder(p, CommandBinder.getNbtHandler().getCmdArray(item), CommandBinder.getNbtHandler().getPermArray(item));
                 builder.startCmds();
             }
         }

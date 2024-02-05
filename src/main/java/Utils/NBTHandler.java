@@ -12,6 +12,7 @@ public class NBTHandler {
     public NBTHandler() {
     }
 
+    // ------------------- Commands ------------------- //
     public void addCommand(ItemStack item, String cmd) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
@@ -89,4 +90,71 @@ public class NBTHandler {
         }
         return null;
     }
+    // ------------------- Commands ------------------- //
+
+
+    // ------------------ Permissions ------------------ //
+    public void addPermission(ItemStack item, String permission) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbperm" + getHighestPermId(item)), PersistentDataType.STRING, permission);
+            item.setItemMeta(itemMeta);
+        }
+    }
+
+    public void removePermission(ItemStack item, String perm) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            ArrayList<String> perms = getPermArray(item);
+            perms.remove(perm);
+            for (int i = 1; i < perms.size() + 2; i++) {
+                itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbperm" + i));
+            }
+            for (int i = 1; i < perms.size(); i++) {
+                itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbperm" + (i + 1)), PersistentDataType.STRING, perms.get(i));
+            }
+            item.setItemMeta(itemMeta);
+        }
+    }
+
+    public String getPermission(ItemStack item, int id) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING);
+        }
+        return null;
+    }
+
+    public int getHighestPermId(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            int id = 1;
+            while (true) {
+                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING)) {
+                    return id;
+                } else {
+                    id++;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public ArrayList<String> getPermArray(ItemStack item) {
+        ArrayList<String> perms = new ArrayList<>();
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            int id = 1;
+            while (true) {
+                if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING)) {
+                    return perms;
+                } else {
+                    perms.add(itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING));
+                    id++;
+                }
+            }
+        }
+        return null;
+    }
+    // ------------------ Permissions ------------------ //
 }

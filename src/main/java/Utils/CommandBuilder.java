@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.time.ZoneId;
 import java.util.*;
@@ -16,10 +17,14 @@ public class CommandBuilder {
     private TimeZone timeZone;
     private final Calendar cal = Calendar.getInstance();
     private Queue<String> cmds;
+    private ArrayList<String> perms;
+    private PermissionHandler permissionHandler;
 
-    public CommandBuilder(Player p, ArrayList<String> cmds) {
+    public CommandBuilder(Player p, ArrayList<String> cmds, ArrayList<String> perms) {
         this.p = p;
         this.cmds = new ArrayDeque<>(cmds);
+        this.perms = perms;
+        permissionHandler = new PermissionHandler(CommandBinder.getPermissionSystemHandler(), CommandBinder.getPermsConfig());
         timeZone = TimeZone.getTimeZone(ZoneId.systemDefault());
         cal.setTimeZone(timeZone);
     }
@@ -112,7 +117,13 @@ public class CommandBuilder {
                 int times = Integer.parseInt(split[1]);
                 repeatCode(times);
             } else {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                for (String perm : perms) {
+                    permissionHandler.addPermission(p.getUniqueId(), perm);
+                }
+                p.performCommand(cmd);
+                for (String perm : perms) {
+                    permissionHandler.removePermission(p.getUniqueId(), perm);
+                }
                 executeNextCmd();
             }
         }

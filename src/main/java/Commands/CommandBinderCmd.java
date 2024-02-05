@@ -49,12 +49,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                                CommandBinder.getInstance().nbtHandlers.get(p).addCommand(item, commandWithArgs);
-                                p.sendMessage(Messages.cmdAdded);
-                            } else {
-                                p.sendMessage(Messages.invalidSession);
-                            }
+                            CommandBinder.getNbtHandler().addCommand(item, commandWithArgs);
+                            p.sendMessage(Messages.cmdAdded);
                         } else {
                             p.sendMessage(Messages.noItem);
                         }
@@ -69,15 +65,11 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                     if (args.length == 2) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
-                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                                if (Integer.parseInt(args[1]) <= CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) && Integer.parseInt(args[1]) > 0) {
-                                    CommandBinder.getInstance().nbtHandlers.get(p).removeCommand(item, Integer.parseInt(args[1]));
-                                    p.sendMessage(Messages.cmdRemoved);
-                                } else {
-                                    p.sendMessage(Messages.invalidId);
-                                }
+                            if (Integer.parseInt(args[1]) <= CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) > 0) {
+                                CommandBinder.getNbtHandler().removeCommand(item, Integer.parseInt(args[1]));
+                                p.sendMessage(Messages.cmdRemoved);
                             } else {
-                                p.sendMessage(Messages.invalidSession);
+                                p.sendMessage(Messages.invalidId);
                             }
                         } else {
                             p.sendMessage(Messages.noItem);
@@ -94,15 +86,11 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                            if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                                if (Integer.parseInt(args[1]) < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) && Integer.parseInt(args[1]) >= 0) {
-                                    CommandBinder.getInstance().nbtHandlers.get(p).insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
-                                    p.sendMessage(Messages.cmdInserted);
-                                } else {
-                                    p.sendMessage(Messages.invalidId);
-                                }
+                            if (Integer.parseInt(args[1]) < CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) >= 0) {
+                                CommandBinder.getNbtHandler().insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
+                                p.sendMessage(Messages.cmdInserted);
                             } else {
-                                p.sendMessage(Messages.invalidSession);
+                                p.sendMessage(Messages.invalidId);
                             }
                         } else {
                             p.sendMessage(Messages.noItem);
@@ -116,20 +104,68 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                     if (p.getInventory().getItemInMainHand().getType().isItem()) {
                         ItemStack item = p.getInventory().getItemInMainHand();
                         p.sendMessage(Messages.listHeader);
-                        if (CommandBinder.getInstance().nbtHandlers.containsKey(p)) {
-                            if (CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item) != 0) {
-                                for (int i = 1; i < CommandBinder.getInstance().nbtHandlers.get(p).getHighestId(item); i++) {
-                                    if (i % 2 == 0) {
-                                        p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
-                                    } else {
-                                        p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getInstance().nbtHandlers.get(p).getCommand(item, i));
-                                    }
+                        if (CommandBinder.getNbtHandler().getHighestId(item) != 0) {
+                            for (int i = 1; i < CommandBinder.getNbtHandler().getHighestId(item); i++) {
+                                if (i % 2 == 0) {
+                                    p.sendMessage(Messages.listItemEven + i + Messages.listItemPlaceholder + CommandBinder.getNbtHandler().getCommand(item, i));
+                                } else {
+                                    p.sendMessage(Messages.listItemOdd + i + Messages.listItemPlaceholder + CommandBinder.getNbtHandler().getCommand(item, i));
                                 }
-                            } else {
-                                p.sendMessage(Messages.noCmds);
                             }
                         } else {
-                            p.sendMessage(Messages.invalidSession);
+                            p.sendMessage(Messages.noCmds);
+                        }
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+            } else if (args[0].equals("addperm")) {
+                if (p.hasPermission("commandbinder.addperm")) {
+                    if (args.length > 1) {
+                        if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                            ItemStack item = p.getInventory().getItemInMainHand();
+                            String permission = args[1];
+                            CommandBinder.getNbtHandler().addPermission(item, permission);
+                            p.sendMessage(Messages.permAdded);
+                        } else {
+                            p.sendMessage(Messages.noItem);
+                        }
+                    } else {
+                        p.sendMessage(Messages.usageAddPerm);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+            } else if (args[0].equals("removeperm")) {
+                if (p.hasPermission("commandbinder.removeperm")) {
+                    if (args.length > 1) {
+                        if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                            ItemStack item = p.getInventory().getItemInMainHand();
+                            String permission = args[1];
+                            CommandBinder.getNbtHandler().removePermission(item, permission);
+                            p.sendMessage(Messages.permRemoved);
+                        } else {
+                            p.sendMessage(Messages.noItem);
+                        }
+                    } else {
+                        p.sendMessage(Messages.usageRemovePerm);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+            } else if (args[0].equals("listperms")) {
+                if (p.hasPermission("commandbinder.listperms")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        p.sendMessage(Messages.listPermHeader);
+                        if (CommandBinder.getNbtHandler().getHighestPermId(item) != 0) {
+                            for (int i = 1; i < CommandBinder.getNbtHandler().getHighestPermId(item); i++) {
+                                p.sendMessage(Messages.listItemEven + "§3" + CommandBinder.getNbtHandler().getPermission(item, i));
+                            }
+                        } else {
+                            p.sendMessage(Messages.noPerms);
                         }
                     } else {
                         p.sendMessage(Messages.noItem);
@@ -151,6 +187,9 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
             completions.add("remove");
             completions.add("insert");
             completions.add("list");
+            completions.add("addperm");
+            completions.add("removeperm");
+            completions.add("listperms");
             completions.add("placeholders");
             completions.add("info");
             completions.add("customcommands");
