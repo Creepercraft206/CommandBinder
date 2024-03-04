@@ -1,39 +1,28 @@
 package Utils;
 
-import Utils.SQL.ConfigHandler;
-import Utils.SQL.PermissionSystemHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class PermissionHandler {
 
-    private final PermissionSystemHandler pSysHandler;
     private final ConfigHandler permsConfig;
 
-    public PermissionHandler(PermissionSystemHandler pSysHandler, ConfigHandler permsConfig) {
-        this.pSysHandler = pSysHandler;
+    public PermissionHandler(ConfigHandler permsConfig) {
         this.permsConfig = permsConfig;
     }
 
     public void addPermission(UUID uuid, String permission) {
-        String table = permsConfig.getConfigSetting("Table_User_Permissions");
-        String[] columns = {
-            permsConfig.getConfigSetting("Column_UUID"),
-            permsConfig.getConfigSetting("Column_Permissions")
-        };
-        String[] values = { uuid.toString(), permission };
-        pSysHandler.insert(table, columns, values);
+        String cmd = permsConfig.getConfigSetting("Cmd-add-Permission");
+        cmd = cmd.replace("%player%", Bukkit.getPlayer(uuid).getName());
+        cmd = cmd.replace("%permission%", permission);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
     }
 
     public void removePermission(UUID uuid, String permission) {
-        String table = permsConfig.getConfigSetting("Table_User_Permissions");
-        String[] columns = {
-            permsConfig.getConfigSetting("Column_UUID"),
-            permsConfig.getConfigSetting("Column_Permissions")
-        };
-        String[] values = { uuid.toString(), permission };
-        pSysHandler.delete(table, columns, values);
+        String cmd = permsConfig.getConfigSetting("Cmd-remove-Permission");
+        cmd = cmd.replace("%player%", Bukkit.getPlayer(uuid).getName());
+        cmd = cmd.replace("%permission%", permission);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
     }
 }

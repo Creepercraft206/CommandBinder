@@ -1,10 +1,10 @@
 package de.hgpractice.commandbinder;
 
 import Commands.CommandBinderCmd;
+import Listeners.InventoryListener;
 import Listeners.ItemInteractListener;
-import Utils.SQL.ConfigHandler;
+import Utils.ConfigHandler;
 import Utils.NBTHandler;
-import Utils.SQL.PermissionSystemHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -27,11 +27,6 @@ public final class CommandBinder extends JavaPlugin {
         return permsConfig;
     }
 
-    private static PermissionSystemHandler pSysHandler;
-    public static PermissionSystemHandler getPermissionSystemHandler() {
-        return pSysHandler;
-    }
-
     @Override
     public void onEnable() {
         instance = this;
@@ -39,26 +34,10 @@ public final class CommandBinder extends JavaPlugin {
 
         // ------------------ Configs ------------------ //
         HashMap<String, Object> settings = new HashMap<>();
-        settings.put("Host", "localhost");
-        settings.put("Port", "3306");
-        settings.put("Database", "yourDatabase");
-        settings.put("Username", "yourUsername");
-        settings.put("Password", "yourPassword");
-        settings.put("Table_User_Permissions", "yourTable");
-        settings.put("Column_UUID", "yourColumn");
-        settings.put("Column_Permissions", "yourColumn");
+        settings.put("Cmd-add-permission", "lp user %player% permission set %permission%");
+        settings.put("Cmd-remove-permission", "lp user %player% permission unset %permission%");
         permsConfig = new ConfigHandler("CommandBinder", "PermissionSystem", settings);
         // ------------------ Configs ------------------ //
-
-        // ------------- Permission System ------------- //
-        pSysHandler = new PermissionSystemHandler(
-                permsConfig.getConfigSetting("Host"),
-                permsConfig.getConfigSetting("Port"),
-                permsConfig.getConfigSetting("Database"),
-                permsConfig.getConfigSetting("Username"),
-                permsConfig.getConfigSetting("Password")
-        );
-        // ------------- Permission System ------------- //
 
         // ------------------ Commands ------------------ //
         getCommand("commandbinder").setExecutor(new CommandBinderCmd());
@@ -67,11 +46,12 @@ public final class CommandBinder extends JavaPlugin {
 
         // ------------------ Listeners ------------------ //
         getServer().getPluginManager().registerEvents(new ItemInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         // ------------------ Listeners ------------------ //
     }
 
     @Override
     public void onDisable() {
-        pSysHandler.close();
+
     }
 }

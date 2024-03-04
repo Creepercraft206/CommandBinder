@@ -1,5 +1,6 @@
 package Commands;
 
+import Utils.CommandBuilder;
 import Utils.Messages;
 import de.hgpractice.commandbinder.CommandBinder;
 import org.bukkit.command.Command;
@@ -99,6 +100,28 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageInsert);
                     }
                 }
+            } else if (args[0].equals("set")) {
+                if (p.hasPermission("commandbinder.set")) {
+                    if (args.length > 2) {
+                        if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                            ItemStack item = p.getInventory().getItemInMainHand();
+                            String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                            if (Integer.parseInt(args[1]) <= CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) > 0) {
+                                CommandBinder.getNbtHandler().removeCommand(item, Integer.parseInt(args[1]));
+                                CommandBinder.getNbtHandler().insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
+                                p.sendMessage(Messages.cmdSet);
+                            } else {
+                                p.sendMessage(Messages.invalidId);
+                            }
+                        } else {
+                            p.sendMessage(Messages.noItem);
+                        }
+                    } else {
+                        p.sendMessage(Messages.usageSet);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
             } else if (args[0].equals("list")) {
                 if (p.hasPermission("commandbinder.list")) {
                     if (p.getInventory().getItemInMainHand().getType().isItem()) {
@@ -173,6 +196,64 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                 } else {
                     p.sendMessage(Messages.noPerms);
                 }
+            } else if (args[0].equals("use")) {
+                if (p.hasPermission("commandbinder.use")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        CommandBuilder builder = new CommandBuilder(p, CommandBinder.getNbtHandler().getCmdArray(item), CommandBinder.getNbtHandler().getPermArray(item));
+                        builder.startCmds();
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+            } else if (args[0].equals("onetimeuse")) {
+                if (p.hasPermission("commandbinder.onetimeuse")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        if (args.length == 2) {
+                            if (args[1].equals("true")) {
+                                CommandBinder.getNbtHandler().setOneTimeUseState(item, true);
+                                p.sendMessage(Messages.oneTimeUseTrue);
+                            } else if (args[1].equals("false")) {
+                                CommandBinder.getNbtHandler().setOneTimeUseState(item, false);
+                                p.sendMessage(Messages.oneTimeUseFalse);
+                            } else {
+                                p.sendMessage(Messages.usageOneTimeUse);
+                            }
+                        } else {
+                            p.sendMessage(Messages.usageOneTimeUse);
+                        }
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
+            } else if (args[0].equals("confirm")) {
+                if (p.hasPermission("commandbinder.confirm")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        if (args.length == 2) {
+                            if (args[1].equals("true")) {
+                                CommandBinder.getNbtHandler().setConfirmState(item, true);
+                                p.sendMessage(Messages.confirmTrue);
+                            } else if (args[1].equals("false")) {
+                                CommandBinder.getNbtHandler().setConfirmState(item, false);
+                                p.sendMessage(Messages.confirmFalse);
+                            } else {
+                                p.sendMessage(Messages.usageConfirm);
+                            }
+                        } else {
+                            p.sendMessage(Messages.usageConfirm);
+                        }
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    p.sendMessage(Messages.noPerms);
+                }
             }
         }
         return false;
@@ -186,7 +267,11 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
             completions.add("add");
             completions.add("remove");
             completions.add("insert");
+            completions.add("set");
             completions.add("list");
+            completions.add("use");
+            completions.add("onetimeuse");
+            completions.add("confirm");
             completions.add("addperm");
             completions.add("removeperm");
             completions.add("listperms");

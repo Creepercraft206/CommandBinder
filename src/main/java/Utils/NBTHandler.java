@@ -25,6 +25,10 @@ public class NBTHandler {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
             ArrayList<String> cmds = getCmdArray(item);
+            if (id == cmds.size()) {
+                cmds.remove(id - 1);
+                return;
+            }
             if (id < cmds.size()) {
                 cmds.remove(id - 1);
             }
@@ -49,6 +53,44 @@ public class NBTHandler {
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (id + 1)), PersistentDataType.STRING, cmd);
             item.setItemMeta(itemMeta);
         }
+    }
+
+    public void setOneTimeUseState(ItemStack item, boolean state) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbOneTimeUse"), PersistentDataType.INTEGER, state ? 1 : 0);
+            item.setItemMeta(itemMeta);
+        }
+    }
+
+    public void setConfirmState(ItemStack item, boolean state) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbConfirm"), PersistentDataType.INTEGER, state ? 1 : 0);
+            item.setItemMeta(itemMeta);
+        }
+    }
+
+    public boolean getOneTimeUseState(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbOneTimeUse"), PersistentDataType.INTEGER)) {
+                return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbOneTimeUse"), PersistentDataType.INTEGER) == 1;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public boolean getConfirmState(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbConfirm"), PersistentDataType.INTEGER)) {
+                return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbConfirm"), PersistentDataType.INTEGER) == 1;
+            }
+            return false;
+        }
+        return false;
     }
 
     public int getHighestId(ItemStack item) {

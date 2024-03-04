@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.time.ZoneId;
 import java.util.*;
@@ -24,7 +23,7 @@ public class CommandBuilder {
         this.p = p;
         this.cmds = new ArrayDeque<>(cmds);
         this.perms = perms;
-        permissionHandler = new PermissionHandler(CommandBinder.getPermissionSystemHandler(), CommandBinder.getPermsConfig());
+        permissionHandler = new PermissionHandler(CommandBinder.getPermsConfig());
         timeZone = TimeZone.getTimeZone(ZoneId.systemDefault());
         cal.setTimeZone(timeZone);
     }
