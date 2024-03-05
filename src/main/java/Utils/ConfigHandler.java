@@ -33,17 +33,17 @@ public class ConfigHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        for (String setting : configSettings.keySet()) {
-            if (cfg.get(setting) == null) {
-                cfg.set(setting, configSettings.get(setting));
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+            for (String setting : configSettings.keySet()) {
+                if (cfg.get(setting) == null) {
+                    cfg.set(setting, configSettings.get(setting));
+                }
             }
-        }
-        try {
-            cfg.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                cfg.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
