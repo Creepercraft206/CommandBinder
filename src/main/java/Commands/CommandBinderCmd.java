@@ -107,8 +107,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                             if (Integer.parseInt(args[1]) <= CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) > 0) {
-                                CommandBinder.getNbtHandler().removeCommand(item, Integer.parseInt(args[1]));
-                                CommandBinder.getNbtHandler().insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
+                                CommandBinder.getNbtHandler().setCommand(item, Integer.parseInt(args[1]), commandWithArgs);
                                 p.sendMessage(Messages.cmdSet);
                             } else {
                                 p.sendMessage(Messages.invalidId);
@@ -166,9 +165,11 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                     if (args.length > 1) {
                         if (p.getInventory().getItemInMainHand().getType().isItem()) {
                             ItemStack item = p.getInventory().getItemInMainHand();
-                            String permission = args[1];
-                            CommandBinder.getNbtHandler().removePermission(item, permission);
-                            p.sendMessage(Messages.permRemoved);
+                            if (CommandBinder.getNbtHandler().removePermission(item, args[1])) {
+                                p.sendMessage(Messages.permRemoved);
+                            } else {
+                                p.sendMessage(Messages.invalidPerm);
+                            }
                         } else {
                             p.sendMessage(Messages.noItem);
                         }
@@ -187,8 +188,6 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             for (int i = 1; i < CommandBinder.getNbtHandler().getHighestPermId(item); i++) {
                                 p.sendMessage(Messages.listItemEven + "§3" + CommandBinder.getNbtHandler().getPermission(item, i));
                             }
-                        } else {
-                            p.sendMessage(Messages.noPerms);
                         }
                     } else {
                         p.sendMessage(Messages.noItem);

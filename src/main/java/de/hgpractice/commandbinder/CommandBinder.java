@@ -57,7 +57,8 @@ public final class CommandBinder extends JavaPlugin {
         messages.put("List-Item-Even", "§7× §b");
         messages.put("List-Item-Placeholder", " §8» §7");
         messages.put("No-Permissions", "%prefix% §cDazu hast du keine Rechte!");
-        messages.put("Invalid-ID", "%prefix% §cDiese §3ID §7existiert nicht!");
+        messages.put("Invalid-ID", "%prefix% §cDiese §3ID §cexistiert nicht!");
+        messages.put("Invalid-Perm", "%prefix% §cDiese §3Permission §cexistiert nicht auf dem Item!");
         messages.put("No-Cmds-On-Item", "%prefix% Es sind §ckeine §7Befehle auf diesem Item gespeichert!");
         messages.put("No-Item-In-Hand", "%prefix% Du musst ein Item in der Hand halten!");
         messagesConfig = new ConfigHandler("CommandBinder", "Messages", messages);
@@ -91,6 +92,7 @@ public final class CommandBinder extends JavaPlugin {
         Messages.listItemPlaceholder = messagesConfig.getConfigSetting("List-Item-Placeholder").replace("%prefix%", Messages.prefix);
         Messages.noPerms = messagesConfig.getConfigSetting("No-Permissions").replace("%prefix%", Messages.prefix);
         Messages.invalidId = messagesConfig.getConfigSetting("Invalid-ID").replace("%prefix%", Messages.prefix);
+        Messages.invalidPerm = messagesConfig.getConfigSetting("Invalid-Perm").replace("%prefix%", Messages.prefix);
         Messages.noCmds = messagesConfig.getConfigSetting("No-Cmds-On-Item").replace("%prefix%", Messages.prefix);
         Messages.noItem = messagesConfig.getConfigSetting("No-Item-In-Hand").replace("%prefix%", Messages.prefix);
         // ------------------ Messages ------------------ //

@@ -109,7 +109,7 @@ public class CommandBuilder {
             cmd = replacePlaceholders(cmd);
             if (cmd.startsWith("!wait")) {
                 String[] split = cmd.split(" ");
-                int delay = Integer.parseInt(split[1]);
+                double delay = Double.parseDouble(split[1]);
                 delayCode(delay);
             } else if (cmd.startsWith("!repeat")) {
                 String[] split = cmd.split(" ");
@@ -128,25 +128,38 @@ public class CommandBuilder {
         }
     }
 
-    private void delayCode(int delay) {
+    private void delayCode(double delay) {
+        delay = Math.round((delay * 10.0) / 10.0) * 20;
         new BukkitRunnable() {
             @Override
             public void run() {
                 executeNextCmd();
             }
-        }.runTaskLater(CommandBinder.getInstance(), delay * 20L);
+        }.runTaskLater(CommandBinder.getInstance(), (long) delay);
     }
 
     private void repeatCode(int times) {
         String cmd = cmds.poll();
         ArrayList<String> repeatCmds = new ArrayList<>();
+        ArrayList<String> followingCmds = new ArrayList<>();
+        boolean endRepeatEncountered = false;
         while (cmd != null && !cmd.equals("!endrepeat")) {
             repeatCmds.add(cmd);
+            cmd = cmds.poll();
+            if (cmd != null && cmd.equals("!endrepeat")) {
+                endRepeatEncountered = true;
+            }
+        }
+        while (cmd != null) {
+            if (endRepeatEncountered) {
+                followingCmds.add(cmd);
+            }
             cmd = cmds.poll();
         }
         for (int i = 0; i < times; i++) {
             cmds.addAll(repeatCmds);
         }
+        cmds.addAll(followingCmds);
         executeNextCmd();
     }
 }

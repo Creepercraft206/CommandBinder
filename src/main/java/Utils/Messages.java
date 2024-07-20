@@ -23,20 +23,20 @@ public class Messages {
     public static String listItemEven = "§7× §b";
     public static String listItemPlaceholder = " §8» §7";
     public static String helpText = prefix + "Help\n" +
-            "§8× §7/commandbinder add <Befehl> §8» §7Fügt einen Befehl hinzu.\n" +
-            "§8× §7/commandbinder remove <ID> §8» §7Entfernt einen Befehl.\n" +
-            "§8× §7/commandbinder insert <ID> <Befehl> §8» §7Fügt einen Befehl an einer bestimmten Stelle hinzu.\n" +
-            "§8× §7/commandbinder set <ID> <Befehl> §8» §7Setzt einen Befehl an einer bestimmten Stelle.\n" +
-            "§8× §7/commandbinder list §8» §7Listet alle Befehle auf.\n" +
-            "§8× §7/commandbinder onetimeuse <true/false> §8» §7Setzt ob das Item beim Nutzen verschwindet.\n" +
-            "§8× §7/commandbinder confirm <true/false> §8» §7Setzt ob eine Bestätigung angezeigt wird.\n" +
-            "§8× §7/commandbinder addperm <Permission> §8» §7Fügt eine Permission hinzu.\n" +
-            "§8× §7/commandbinder removeperm <Permission> §8» §7Entfernt eine Permission.\n" +
-            "§8× §7/commandbinder listperms §8» §7Zeigt alle Permissions eines Items.\n" +
-            "§8× §7/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
-            "§8× §7/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
-            "§8× §7/commandbinder help §8» §7Zeigt diese Hilfe an.\n" +
-            "§8× §7/commandbinder info §8» §7Zeigt Informationen über das Plugin an.";
+            "§8× §3/commandbinder add <Befehl> §8» §7Fügt einen Befehl hinzu.\n" +
+            "§8× §3/commandbinder remove <ID> §8» §7Entfernt einen Befehl.\n" +
+            "§8× §3/commandbinder insert <ID> <Befehl> §8» §7Fügt einen Befehl an einer bestimmten Stelle hinzu.\n" +
+            "§8× §3/commandbinder set <ID> <Befehl> §8» §7Setzt einen Befehl an einer bestimmten Stelle.\n" +
+            "§8× §3/commandbinder list §8» §7Listet alle Befehle auf.\n" +
+            "§8× §3/commandbinder onetimeuse <true/false> §8» §7Setzt ob das Item beim Nutzen verschwindet.\n" +
+            "§8× §3/commandbinder confirm <true/false> §8» §7Setzt ob eine Bestätigung angezeigt wird.\n" +
+            "§8× §3/commandbinder addperm <Permission> §8» §7Fügt eine Permission hinzu.\n" +
+            "§8× §3/commandbinder removeperm <Permission> §8» §7Entfernt eine Permission.\n" +
+            "§8× §3/commandbinder listperms §8» §7Zeigt alle Permissions eines Items.\n" +
+            "§8× §3/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
+            "§8× §3/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
+            "§8× §3/commandbinder help §8» §7Zeigt diese Hilfe an.\n" +
+            "§8× §3/commandbinder info §8» §7Zeigt Informationen über das Plugin an.";
     public static String infoText = prefix + "Info\n" +
             "§8× §3Version: §8» §7" + CommandBinder.getInstance().getDescription().getVersion() + "\n" +
             "§8× §3Author: §8» §7" + CommandBinder.getInstance().getDescription().getAuthors().get(0) + "\n" +
@@ -74,7 +74,8 @@ public class Messages {
 
     // ------------------- ErrorOutput ------------------- //
     public static String noPerms = prefix + "§cDazu hast du keine Rechte!";
-    public static String invalidId = prefix + "Diese §3ID §7existiert §cnicht§7!";
+    public static String invalidId = prefix + "§cDiese §3ID §cexistiert nicht!";
+    public static String invalidPerm = prefix + "§cDiese §3Permission §cexistiert nicht auf dem Item!";
     public static String noCmds = prefix + "Es sind §ckeine §7Befehle auf diesem Item gespeichert!";
     public static String noItem = prefix + "§cDu musst ein Item in der Hand halten!";
     // ------------------- ErrorOutput ------------------- //

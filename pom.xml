@@ -6,7 +6,7 @@
 
   <groupId>de.hgpractice</groupId>
   <artifactId>CommandBinder</artifactId>
-  <version>1.1-BETA</version>
+  <version>1.1</version>
   <packaging>jar</packaging>
 
   <name>CommandBinder</name>
