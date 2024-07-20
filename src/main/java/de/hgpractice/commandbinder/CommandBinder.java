@@ -8,7 +8,7 @@ import Utils.Messages;
 import Utils.NBTHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public final class CommandBinder extends JavaPlugin {
 
@@ -35,12 +35,12 @@ public final class CommandBinder extends JavaPlugin {
         nbtHandler = new NBTHandler();
 
         // ------------------ Configs ------------------ //
-        HashMap<String, Object> settings = new HashMap<>();
+        LinkedHashMap<String, Object> settings = new LinkedHashMap<String, Object>();
         settings.put("Cmd-add-permission", "lp user %player% permission set %permission%");
         settings.put("Cmd-remove-permission", "lp user %player% permission unset %permission%");
         permsConfig = new ConfigHandler("CommandBinder", "PermissionSystem", settings);
 
-        HashMap<String, Object> messages = new HashMap<>();
+        LinkedHashMap<String, Object> messages = new LinkedHashMap<String, Object>();
         messages.put("Prefix", "§7» §3CommandBinder §8×§7");
         messages.put("Cmd-Added", "%prefix% Der §3Befehl §7wurde erfolgreich §3hinzugefügt§7!");
         messages.put("Cmd-Removed", "%prefix% Der §3Befehl §7wurde erfolgreich §3entfernt§7!");
