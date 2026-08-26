@@ -257,6 +257,17 @@ public class CommandBuilder {
                 for (String perm : perms) {
                     permissionHandler.addPermission(p.getUniqueId(), perm);
                 }
+                boolean hasAllPermissionsReceived = perms.isEmpty();
+                while (!hasAllPermissionsReceived) {
+                    for (String perm : perms) {
+                        if (p.hasPermission(perm)) {
+                            hasAllPermissionsReceived = true;
+                        } else {
+                            hasAllPermissionsReceived = false;
+                            break;
+                        }
+                    }
+                }
                 p.performCommand(cmd);
                 for (String perm : perms) {
                     permissionHandler.removePermission(p.getUniqueId(), perm);

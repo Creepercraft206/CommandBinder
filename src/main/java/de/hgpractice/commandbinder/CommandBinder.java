@@ -73,6 +73,9 @@ public final class CommandBinder extends JavaPlugin {
         messages.put("Invalid-Cooldown", "%prefix% §cDer §3Cooldown §cmuss eine Zahl sein!");
         messages.put("No-Cmds-On-Item", "%prefix% Es sind §ckeine §7Befehle auf diesem Item gespeichert!");
         messages.put("No-Item-In-Hand", "%prefix% §cDu musst ein Item in der Hand halten!");
+        messages.put("Message-Set", "%prefix% Die Message §3%type% §7wurde erfolgreich auf '%message%§r§7' für dieses Item gesetzt!");
+        messages.put("Message-Unset", "%prefix% §7Die Message §3%type% §7wurde erfolgreich für dieses Item entfernt!");
+        messages.put("Message-Reset", "%prefix% §7Die Message §3%type% §7wurde erfolgreich auf den §3Systemwert §7zurückgesetzt!");
         messagesConfig = new ConfigHandler("CommandBinder", "Messages", messages);
         // ------------------ Configs ------------------ //
 
@@ -112,6 +115,9 @@ public final class CommandBinder extends JavaPlugin {
         Messages.invalidCooldown = messagesConfig.getConfigSetting("Invalid-Cooldown").replace("%prefix%", Messages.prefix);
         Messages.noCmds = messagesConfig.getConfigSetting("No-Cmds-On-Item").replace("%prefix%", Messages.prefix);
         Messages.noItem = messagesConfig.getConfigSetting("No-Item-In-Hand").replace("%prefix%", Messages.prefix);
+        Messages.messageSet = messagesConfig.getConfigSetting("Message-Set").replace("%prefix%", Messages.prefix);
+        Messages.messageUnset = messagesConfig.getConfigSetting("Message-Unset").replace("%prefix%", Messages.prefix);
+        Messages.messageReset = messagesConfig.getConfigSetting("Message-Reset").replace("%prefix%", Messages.prefix);
         // ------------------ Messages ------------------ //
     }
 

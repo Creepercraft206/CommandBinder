@@ -1,6 +1,7 @@
 package Commands;
 
 import Utils.CommandBuilder;
+import Utils.MessageType;
 import Utils.Messages;
 import de.hgpractice.commandbinder.CommandBinder;
 import org.bukkit.Sound;
@@ -52,7 +53,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                             CommandBinder.getNbtHandler().addCommand(item, commandWithArgs);
-                            p.sendMessage(Messages.cmdAdded);
+
+                            sendMessage(p, item, MessageType.CMD_ADDED);
                         } else {
                             p.sendMessage(Messages.noItem);
                         }
@@ -60,7 +62,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageAdd);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("remove")) {
                 if (p.hasPermission("commandbinder.remove")) {
@@ -69,7 +71,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             if (Integer.parseInt(args[1]) <= CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) > 0) {
                                 CommandBinder.getNbtHandler().removeCommand(item, Integer.parseInt(args[1]));
-                                p.sendMessage(Messages.cmdRemoved);
+
+                                sendMessage(p, item, MessageType.CMD_REMOVED);
                             } else {
                                 p.sendMessage(Messages.invalidId);
                             }
@@ -80,7 +83,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageRemove);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("insert")) {
                 if (p.hasPermission("commandbinder.insert")) {
@@ -90,7 +93,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                             if (Integer.parseInt(args[1]) < CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) >= 0) {
                                 CommandBinder.getNbtHandler().insertCommand(item, Integer.parseInt(args[1]), commandWithArgs);
-                                p.sendMessage(Messages.cmdInserted);
+
+                                sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.CMD_INSERTED);
                             } else {
                                 p.sendMessage(Messages.invalidId);
                             }
@@ -100,6 +104,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                     } else {
                         p.sendMessage(Messages.usageInsert);
                     }
+                } else {
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("set")) {
                 if (p.hasPermission("commandbinder.set")) {
@@ -109,7 +115,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             String commandWithArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                             if (Integer.parseInt(args[1]) <= CommandBinder.getNbtHandler().getHighestId(item) && Integer.parseInt(args[1]) > 0) {
                                 CommandBinder.getNbtHandler().setCommand(item, Integer.parseInt(args[1]), commandWithArgs);
-                                p.sendMessage(Messages.cmdSet);
+
+                                sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.CMD_SET);
                             } else {
                                 p.sendMessage(Messages.invalidId);
                             }
@@ -120,7 +127,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageSet);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("list")) {
                 if (p.hasPermission("commandbinder.list")) {
@@ -142,7 +149,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.noItem);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("cooldown")) {
                 if (p.hasPermission("commandbinder.cooldown")) {
@@ -153,10 +160,10 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                                 int cooldown = Integer.parseInt(args[1]);
                                 if (cooldown == 0) {
                                     CommandBinder.getNbtHandler().removeCooldown(item);
-                                    p.sendMessage(Messages.cooldownRemoved);
+                                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.COOLDOWN_REMOVED);
                                 } else {
                                     CommandBinder.getNbtHandler().setCooldown(item, cooldown);
-                                    p.sendMessage(Messages.cooldownSet.replace("%cooldown%", String.valueOf(cooldown)));
+                                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.COOLDOWN_SET);
                                 }
                             } catch (NumberFormatException e) {
                                 p.sendMessage(Messages.invalidCooldown);
@@ -168,7 +175,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageCooldown);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("addperm")) {
                 if (p.hasPermission("commandbinder.addperm")) {
@@ -177,7 +184,6 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                             ItemStack item = p.getInventory().getItemInMainHand();
                             String permission = args[1];
                             CommandBinder.getNbtHandler().addPermission(item, permission);
-                            p.sendMessage(Messages.permAdded);
                         } else {
                             p.sendMessage(Messages.noItem);
                         }
@@ -185,7 +191,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageAddPerm);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("removeperm")) {
                 if (p.hasPermission("commandbinder.removeperm")) {
@@ -204,7 +210,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.usageRemovePerm);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("listperms")) {
                 if (p.hasPermission("commandbinder.listperms")) {
@@ -220,7 +226,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.noItem);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("use")) {
                 if (p.hasPermission("commandbinder.use")) {
@@ -232,7 +238,7 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.noItem);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             } else if (args[0].equals("onetimeuse")) {
                 if (p.hasPermission("commandbinder.onetimeuse")) {
@@ -241,10 +247,10 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         if (args.length == 2) {
                             if (args[1].equals("true")) {
                                 CommandBinder.getNbtHandler().setOneTimeUseState(item, true);
-                                p.sendMessage(Messages.oneTimeUseTrue);
+                                sendMessage(p, item, MessageType.ONE_TIME_USE_TRUE);
                             } else if (args[1].equals("false")) {
                                 CommandBinder.getNbtHandler().setOneTimeUseState(item, false);
-                                p.sendMessage(Messages.oneTimeUseFalse);
+                                sendMessage(p, item, MessageType.ONE_TIME_USE_FALSE);
                             } else {
                                 p.sendMessage(Messages.usageOneTimeUse);
                             }
@@ -264,10 +270,10 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         if (args.length == 2) {
                             if (args[1].equals("true")) {
                                 CommandBinder.getNbtHandler().setConfirmState(item, true);
-                                p.sendMessage(Messages.confirmTrue);
+                                sendMessage(p, item, MessageType.CONFIRM_TRUE);
                             } else if (args[1].equals("false")) {
                                 CommandBinder.getNbtHandler().setConfirmState(item, false);
-                                p.sendMessage(Messages.confirmFalse);
+                                sendMessage(p, item, MessageType.CONFIRM_FALSE);
                             } else {
                                 p.sendMessage(Messages.usageConfirm);
                             }
@@ -278,7 +284,52 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.noItem);
                     }
                 } else {
-                    p.sendMessage(Messages.noPerms);
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
+                }
+            } else if (args[0].equals("setmessage") || args[0].equals("setmsg")) {
+                if (p.hasPermission("commandbinder.setmessage")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        if (args.length >= 2) {
+                            if (Arrays.stream(MessageType.getMessageTypes()).anyMatch(args[1]::equalsIgnoreCase)) {
+                                if (args.length >= 3) {
+                                    CommandBinder.getNbtHandler().setMessage(item, args[1], String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
+                                    p.sendMessage(Messages.messageSet.replace("%type%", args[1]).replace("%message%", String.join(" ", Arrays.copyOfRange(args, 2, args.length))));
+                                } else {
+                                    CommandBinder.getNbtHandler().setMessage(item, args[1], "");
+                                    p.sendMessage(Messages.messageUnset.replace("%type%", args[1]));
+                                }
+                            } else {
+                                p.sendMessage(Messages.usageSetMessage);
+                            }
+                        } else {
+                            p.sendMessage(Messages.usageSetMessage);
+                        }
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
+                }
+            } else if (args[0].equals("resetmessage") || args[0].equals("resetmsg")) {
+                if (p.hasPermission("commandbinder.resetmessage")) {
+                    if (p.getInventory().getItemInMainHand().getType().isItem()) {
+                        ItemStack item = p.getInventory().getItemInMainHand();
+                        if (args.length >= 2) {
+                            if (Arrays.stream(MessageType.getMessageTypes()).anyMatch(args[1]::equalsIgnoreCase)) {
+                                CommandBinder.getNbtHandler().resetMessage(item, args[1]);
+                                p.sendMessage(Messages.messageReset.replace("%type%", args[1]));
+                            } else {
+                                p.sendMessage(Messages.usageResetMessage);
+                            }
+                        } else {
+                            p.sendMessage(Messages.usageResetMessage);
+                        }
+                    } else {
+                        p.sendMessage(Messages.noItem);
+                    }
+                } else {
+                    sendMessage(p, p.getInventory().getItemInMainHand(), MessageType.NO_PERMS);
                 }
             }
         }
@@ -307,6 +358,10 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
             completions.add("customcmds");
             completions.add("ccmds");
             completions.add("cooldown");
+            completions.add("setmessage");
+            completions.add("setmsg");
+            completions.add("resetmessage");
+            completions.add("resetmsg");
         } else if (args.length == 2) {
             if (args[0].equals("add")) {
                 completions.add("!wait");
@@ -330,6 +385,8 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
             } else if (args[0].equals("onetimeuse") || args[0].equals("confirm")) {
                 completions.add("true");
                 completions.add("false");
+            } else if (args[0].equals("setmessage") || args[0].equals("resetmessage") || args[0].equals("setmsg") || args[0].equals("resetmsg")) {
+                completions.addAll(Arrays.asList(MessageType.getMessageTypes()));
             }
         } else if (args.length == 3) {
             if (args[0].equals("insert") || args[0].equals("set")) {
@@ -353,5 +410,12 @@ public class CommandBinderCmd implements CommandExecutor, TabCompleter {
             }
         }
         return completions;
+    }
+
+    private void sendMessage(Player p, ItemStack item, MessageType type) {
+        String msg = CommandBinder.getNbtHandler().getMessage(item, type);
+        if (msg != null) {
+            p.sendMessage(msg);
+        }
     }
 }

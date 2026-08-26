@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class NBTHandler {
@@ -263,4 +264,63 @@ public class NBTHandler {
         return null;
     }
     // ------------------ Permissions ------------------ //
+
+    // ------------------- Messages ------------------- //
+    public void setMessage(ItemStack item, String messageType, String message) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbmsg-" + messageType), PersistentDataType.STRING, message);
+            item.setItemMeta(itemMeta);
+        }
+    }
+
+    public void resetMessage(ItemStack item, String messageType) {
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbmsg-" + messageType), PersistentDataType.STRING)) {
+                itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbmsg-" + messageType));
+                item.setItemMeta(itemMeta);
+            }
+        }
+    }
+
+    public @Nullable String getMessage(ItemStack item, MessageType messageType) {
+        if (item.getItemMeta() != null) {
+            String message = item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()), PersistentDataType.STRING);
+            if (message != null) {
+                return message.isEmpty() ? null : message;
+            }
+
+            switch (messageType) {
+                case CMD_ADDED:
+                    return Messages.cmdAdded;
+                case CMD_REMOVED:
+                    return Messages.cmdRemoved;
+                case CMD_INSERTED:
+                    return Messages.cmdInserted;
+                case CMD_SET:
+                    return Messages.cmdSet;
+                case ONE_TIME_USE_TRUE:
+                    return Messages.oneTimeUseTrue;
+                case ONE_TIME_USE_FALSE:
+                    return Messages.oneTimeUseFalse;
+                case CONFIRM_TRUE:
+                    return Messages.confirmTrue;
+                case CONFIRM_FALSE:
+                    return Messages.confirmFalse;
+                case ON_COOLDOWN:
+                    return Messages.onCooldown.replace("%remaining%", String.valueOf(getRemainingCooldown(item) / 1000));
+                case COOLDOWN_SET:
+                    return Messages.cooldownSet;
+                case COOLDOWN_REMOVED:
+                    return Messages.cooldownRemoved;
+                case NO_PERMS:
+                    return Messages.noPerms;
+                default:
+                    return null;
+            }
+        }
+        return null;
+    }
+    // ------------------- Messages ------------------- //
 }

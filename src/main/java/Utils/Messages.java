@@ -20,6 +20,9 @@ public class Messages {
     public static String cooldownSet = prefix + "§3Cooldown §7wurde erfolgreich auf §3%cooldown% §7Sekunden gesetzt!";
     public static String cooldownRemoved = prefix + "§3Cooldown §7wurde erfolgreich entfernt!";
     public static String onCooldown = prefix + "§cDu musst noch §3%remaining% §cSekunden warten, bevor du dieses Item erneut verwenden kannst.";
+    public static String messageSet = prefix + "§7Die Message §3%type% §7wurde erfolgreich auf '%message%§r§7' für dieses Item gesetzt!";
+    public static String messageUnset = prefix + "§7Die Message §3%type% §7wurde erfolgreich für dieses Item entfernt!";
+    public static String messageReset = prefix + "§7Die Message §3%type% §7wurde erfolgreich auf den §3Systemwert §7zurückgesetzt!";
     public static String listHeader = prefix + "§3Commands:";
     public static String listPermHeader = prefix + "§3Permissions:";
     public static String listItemOdd = "§7× §9";
@@ -38,6 +41,8 @@ public class Messages {
             "§8× §3/commandbinder listperms §8» §7Zeigt alle Permissions eines Items.\n" +
             "§8× §3/commandbinder placeholders §8» §7Listet alle Platzhalter auf.\n" +
             "§8× §3/commandbinder customcmds §8» §7Listet alle CustomCommands auf.\n" +
+            "§8× §3/commandbinder setmessage <MessageType> [Message] §8» §7Setzt eine itemspezifische Message oder entfernt diese bei leerem Wert.\n" +
+            "§8× §3/commandbinder resetmessage <MessageType> §8» §7Setzt eine itemspezifische Message auf den Systemwert zurück.\n" +
             "§8× §3/commandbinder help §8» §7Zeigt diese Hilfe an.\n" +
             "§8× §3/commandbinder info §8» §7Zeigt Informationen über das Plugin an.";
     public static String infoText = prefix + "Info\n" +
@@ -112,5 +117,7 @@ public class Messages {
     public static String usageOneTimeUse = prefix + "§7Verwendung: §7/commandbinder onetimeuse <true/false>";
     public static String usageConfirm = prefix + "§7Verwendung: §7/commandbinder confirm <true/false>";
     public static String usageCooldown = prefix + "§7Verwendung: §7/commandbinder cooldown <Sekunden>";
+    public static String usageSetMessage = prefix + "§7Verwendung: §7/commandbinder setmessage <MessageType> [Message]";
+    public static String usageResetMessage = prefix + "§7Verwendung: §7/commandbinder resetmessage <MessageType>";
     // --------------------- Usage ----------------------- //
 }

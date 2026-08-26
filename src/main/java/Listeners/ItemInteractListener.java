@@ -2,7 +2,7 @@ package Listeners;
 
 import Utils.CommandBuilder;
 import Utils.ItemCreatorClass;
-import Utils.Messages;
+import Utils.MessageType;
 import de.hgpractice.commandbinder.CommandBinder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -49,7 +48,10 @@ public class ItemInteractListener implements Listener {
         if (CommandBinder.getNbtHandler().isOnCooldown(item)) {
             double remainingCooldown = CommandBinder.getNbtHandler().getRemainingCooldown(item);
             if (remainingCooldown > 0) {
-                p.sendMessage(Messages.onCooldown.replace("%remaining%", String.valueOf(remainingCooldown / 1000)));
+                String msg = CommandBinder.getNbtHandler().getMessage(p.getInventory().getItemInMainHand(), MessageType.ON_COOLDOWN);
+                if (msg != null) {
+                    p.sendMessage(msg);
+                }
                 return;
             }
         } else {
@@ -67,29 +69,6 @@ public class ItemInteractListener implements Listener {
                 item.setAmount(item.getAmount() - 1);
             }
             builder.startCmds();
-        }
-    }
-
-    // Click-Event in Confirm-Inventory
-    @EventHandler
-    private void onInvClick(InventoryClickEvent e) {
-        Player p = (Player) e.getWhoClicked();
-        if (e.getView().getTitle().equals("§3Item nutzen?")) {
-            e.setCancelled(true);
-            if (e.getCurrentItem() != null) {
-                if (e.getCurrentItem().getItemMeta() != null) {
-                    if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§aJa")) {
-                        CommandBuilder builder = new CommandBuilder(p, CommandBinder.getNbtHandler().getCmdArray(p.getInventory().getItemInMainHand()), CommandBinder.getNbtHandler().getPermArray(p.getInventory().getItemInMainHand()));
-                        if (CommandBinder.getNbtHandler().getOneTimeUseState(p.getInventory().getItemInMainHand())) {
-                            p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
-                        }
-                        builder.startCmds();
-                    }
-                    if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§cNein")) {
-                        p.closeInventory();
-                    }
-                }
-            }
         }
     }
 }
