@@ -21,11 +21,6 @@ public final class CommandBinder extends JavaPlugin {
         return instance;
     }
 
-    private static NBTHandler nbtHandler;
-    public static NBTHandler getNbtHandler() {
-        return nbtHandler;
-    }
-
     private static ConfigHandler permsConfig;
     private static ConfigHandler messagesConfig;
     public static ConfigHandler getPermsConfig() {
@@ -37,17 +32,16 @@ public final class CommandBinder extends JavaPlugin {
         System.out.println("\n   \u001B[36mCommandBinder \u001B[34mv." + getDescription().getVersion() + "\u001B[0m");
         System.out.println("   \u001B[37mAuthor: \u001B[34m" + getDescription().getAuthors().get(0) + "\u001B[0m\n");
         instance = this;
-        nbtHandler = new NBTHandler();
 
         License.iConfirmNonCommercialUse("Tim Bahlinger");
 
         // ------------------ Configs ------------------ //
-        LinkedHashMap<String, Object> settings = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> settings = new LinkedHashMap<>();
         settings.put("Cmd-add-permission", "lp user %player% permission set %permission%");
         settings.put("Cmd-remove-permission", "lp user %player% permission unset %permission%");
         permsConfig = new ConfigHandler("CommandBinder", "PermissionSystem", settings);
 
-        LinkedHashMap<String, Object> messages = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> messages = new LinkedHashMap<>();
         messages.put("Prefix", "§7» §3CommandBinder §8×§7");
         messages.put("Cmd-Added", "%prefix% Der §3Befehl §7wurde erfolgreich §3hinzugefügt§7!");
         messages.put("Cmd-Removed", "%prefix% Der §3Befehl §7wurde erfolgreich §3entfernt§7!");

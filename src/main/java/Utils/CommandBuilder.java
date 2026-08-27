@@ -255,7 +255,7 @@ public class CommandBuilder {
                 executeNextCmd();
             } else {
                 for (String perm : perms) {
-                    permissionHandler.addPermission(p.getUniqueId(), perm);
+                    permissionHandler.addPermission(p, perm);
                 }
                 boolean hasAllPermissionsReceived = perms.isEmpty();
                 while (!hasAllPermissionsReceived) {
@@ -270,7 +270,7 @@ public class CommandBuilder {
                 }
                 p.performCommand(cmd);
                 for (String perm : perms) {
-                    permissionHandler.removePermission(p.getUniqueId(), perm);
+                    permissionHandler.removePermission(p, perm);
                 }
                 executeNextCmd();
             }

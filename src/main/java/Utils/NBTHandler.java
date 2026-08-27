@@ -10,22 +10,25 @@ import java.util.ArrayList;
 
 public class NBTHandler {
 
-    public NBTHandler() {
+    private final ItemStack item;
+
+    public NBTHandler(ItemStack item) {
+        this.item = item;
     }
 
     // ------------------- Commands ------------------- //
-    public void addCommand(ItemStack item, String cmd) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void addCommand(String cmd) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + getHighestId(item)), PersistentDataType.STRING, cmd);
-            item.setItemMeta(itemMeta);
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + getHighestId()), PersistentDataType.STRING, cmd);
+            this.item.setItemMeta(itemMeta);
         }
     }
 
-    public void removeCommand(ItemStack item, int id) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void removeCommand(int id) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            ArrayList<String> cmds = getCmdArray(item);
+            ArrayList<String> cmds = getCmdArray();
             if (!cmds.isEmpty() && id > 0 && id <= cmds.size()) {
                 cmds.remove(id-1);
                 for (int i = 1; i < cmds.size() + 2; i++) {
@@ -35,33 +38,33 @@ public class NBTHandler {
                 for (int i = 0; i < cmds.size(); i++) {
                     itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (i + 1)), PersistentDataType.STRING, cmds.get(i));
                 }
-                item.setItemMeta(itemMeta);
+                this.item.setItemMeta(itemMeta);
             }
         }
     }
 
-    public void insertCommand(ItemStack item, int id, String cmd) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void insertCommand(int id, String cmd) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            ArrayList<String> cmds = getCmdArray(item);
+            ArrayList<String> cmds = getCmdArray();
             for (int i = cmds.size() - 1; i >= id; i--) {
                 itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (i + 2)), PersistentDataType.STRING, cmds.get(i));
             }
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + (id + 1)), PersistentDataType.STRING, cmd);
-            item.setItemMeta(itemMeta);
+            this.item.setItemMeta(itemMeta);
         }
     }
 
-    public void setCommand(ItemStack item, int id, String cmd) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void setCommand(int id, String cmd) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING, cmd);
-            item.setItemMeta(itemMeta);
+            this.item.setItemMeta(itemMeta);
         }
     }
 
-    public int getHighestId(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public int getHighestId() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             int id = 1;
             while (true) {
@@ -75,17 +78,17 @@ public class NBTHandler {
         return 0;
     }
 
-    public String getCommand(ItemStack item, int id) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public String getCommand(int id) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbcmd" + id), PersistentDataType.STRING);
         }
         return null;
     }
 
-    public ArrayList<String> getCmdArray(ItemStack item) {
+    public ArrayList<String> getCmdArray() {
         ArrayList<String> cmds = new ArrayList<>();
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             int id = 1;
             while (true) {
@@ -103,24 +106,24 @@ public class NBTHandler {
 
 
     // ------------------- Options ------------------- //
-    public void setOneTimeUseState(ItemStack item, boolean state) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void setOneTimeUseState(boolean state) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbotu"), PersistentDataType.INTEGER, state ? 1 : 0);
             item.setItemMeta(itemMeta);
         }
     }
 
-    public void setConfirmState(ItemStack item, boolean state) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void setConfirmState(boolean state) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbconfirm"), PersistentDataType.INTEGER, state ? 1 : 0);
             item.setItemMeta(itemMeta);
         }
     }
 
-    public boolean getOneTimeUseState(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public boolean getOneTimeUseState() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbotu"), PersistentDataType.INTEGER)) {
                 return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbotu"), PersistentDataType.INTEGER) == 1;
@@ -130,8 +133,8 @@ public class NBTHandler {
         return false;
     }
 
-    public boolean getConfirmState(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public boolean getConfirmState() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbconfirm"), PersistentDataType.INTEGER)) {
                 return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbconfirm"), PersistentDataType.INTEGER) == 1;
@@ -141,16 +144,16 @@ public class NBTHandler {
         return false;
     }
 
-    public void setCooldown(ItemStack item, double cooldown) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void setCooldown(double cooldown) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcooldown"), PersistentDataType.DOUBLE, cooldown);
             item.setItemMeta(itemMeta);
         }
     }
 
-    public void removeCooldown(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void removeCooldown() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown"), PersistentDataType.DOUBLE)) {
                 itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbcooldown"));
@@ -160,8 +163,8 @@ public class NBTHandler {
         }
     }
 
-    public void startCooldown(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void startCooldown() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown"), PersistentDataType.DOUBLE)) {
                 itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbcooldown_start"), PersistentDataType.LONG, System.currentTimeMillis());
@@ -170,8 +173,8 @@ public class NBTHandler {
         }
     }
 
-    public boolean isOnCooldown(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public boolean isOnCooldown() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown"), PersistentDataType.DOUBLE) &&
                 itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown_start"), PersistentDataType.LONG)) {
@@ -183,8 +186,8 @@ public class NBTHandler {
         return false;
     }
 
-    public double getRemainingCooldown(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public double getRemainingCooldown() {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown"), PersistentDataType.DOUBLE) &&
                 itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbcooldown_start"), PersistentDataType.LONG)) {
@@ -197,18 +200,18 @@ public class NBTHandler {
     // ------------------- Options ------------------- //
 
     // ------------------ Permissions ------------------ //
-    public void addPermission(ItemStack item, String permission) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void addPermission(String permission) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbperm" + getHighestPermId(item)), PersistentDataType.STRING, permission);
-            item.setItemMeta(itemMeta);
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbperm" + getHighestPermId()), PersistentDataType.STRING, permission);
+            this.item.setItemMeta(itemMeta);
         }
     }
 
-    public boolean removePermission(ItemStack item, String permission) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public boolean removePermission(String permission) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            ArrayList<String> perms = getPermArray(item);
+            ArrayList<String> perms = getPermArray();
             if (perms.contains(permission)) {
                 perms.remove(permission);
                 for (int i = 1; i < perms.size() + 2; i++) {
@@ -224,17 +227,17 @@ public class NBTHandler {
         return false;
     }
 
-    public String getPermission(ItemStack item, int id) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public String getPermission(int id) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             return itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING);
         }
         return null;
     }
 
-    public int getHighestPermId(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta != null) { //  && itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbperm1"), PersistentDataType.STRING)
+    public int getHighestPermId() {
+        ItemMeta itemMeta = this.item.getItemMeta();
+        if (itemMeta != null) {
             int id = 1;
             while (true) {
                 if (!itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbperm" + id), PersistentDataType.STRING)) {
@@ -247,9 +250,9 @@ public class NBTHandler {
         return 0;
     }
 
-    public ArrayList<String> getPermArray(ItemStack item) {
+    public ArrayList<String> getPermArray() {
         ArrayList<String> perms = new ArrayList<>();
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
             int id = 1;
             while (true) {
@@ -266,59 +269,46 @@ public class NBTHandler {
     // ------------------ Permissions ------------------ //
 
     // ------------------- Messages ------------------- //
-    public void setMessage(ItemStack item, String messageType, String message) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void setMessage(MessageType messageType, String message) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbmsg-" + messageType), PersistentDataType.STRING, message);
-            item.setItemMeta(itemMeta);
+            itemMeta.getPersistentDataContainer().set(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()), PersistentDataType.STRING, message);
+            this.item.setItemMeta(itemMeta);
         }
     }
 
-    public void resetMessage(ItemStack item, String messageType) {
-        ItemMeta itemMeta = item.getItemMeta();
+    public void resetMessage(MessageType messageType) {
+        ItemMeta itemMeta = this.item.getItemMeta();
         if (itemMeta != null) {
-            if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbmsg-" + messageType), PersistentDataType.STRING)) {
-                itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbmsg-" + messageType));
-                item.setItemMeta(itemMeta);
+            if (itemMeta.getPersistentDataContainer().has(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()), PersistentDataType.STRING)) {
+                itemMeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()));
+                this.item.setItemMeta(itemMeta);
             }
         }
     }
 
-    public @Nullable String getMessage(ItemStack item, MessageType messageType) {
-        if (item.getItemMeta() != null) {
-            String message = item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()), PersistentDataType.STRING);
+    public @Nullable String getMessage(MessageType messageType) {
+        ItemMeta itemMeta = this.item.getItemMeta();
+        if (itemMeta != null) {
+            String message = itemMeta.getPersistentDataContainer().get(NamespacedKey.minecraft("cbmsg-" + messageType.getMesssageIdentifier()), PersistentDataType.STRING);
             if (message != null) {
                 return message.isEmpty() ? null : message;
             }
 
-            switch (messageType) {
-                case CMD_ADDED:
-                    return Messages.cmdAdded;
-                case CMD_REMOVED:
-                    return Messages.cmdRemoved;
-                case CMD_INSERTED:
-                    return Messages.cmdInserted;
-                case CMD_SET:
-                    return Messages.cmdSet;
-                case ONE_TIME_USE_TRUE:
-                    return Messages.oneTimeUseTrue;
-                case ONE_TIME_USE_FALSE:
-                    return Messages.oneTimeUseFalse;
-                case CONFIRM_TRUE:
-                    return Messages.confirmTrue;
-                case CONFIRM_FALSE:
-                    return Messages.confirmFalse;
-                case ON_COOLDOWN:
-                    return Messages.onCooldown.replace("%remaining%", String.valueOf(getRemainingCooldown(item) / 1000));
-                case COOLDOWN_SET:
-                    return Messages.cooldownSet;
-                case COOLDOWN_REMOVED:
-                    return Messages.cooldownRemoved;
-                case NO_PERMS:
-                    return Messages.noPerms;
-                default:
-                    return null;
-            }
+            return switch (messageType) {
+                case CMD_ADDED -> Messages.cmdAdded;
+                case CMD_REMOVED -> Messages.cmdRemoved;
+                case CMD_INSERTED -> Messages.cmdInserted;
+                case CMD_SET -> Messages.cmdSet;
+                case ONE_TIME_USE_TRUE -> Messages.oneTimeUseTrue;
+                case ONE_TIME_USE_FALSE -> Messages.oneTimeUseFalse;
+                case CONFIRM_TRUE -> Messages.confirmTrue;
+                case CONFIRM_FALSE -> Messages.confirmFalse;
+                case ON_COOLDOWN -> Messages.onCooldown.replace("%remaining%", String.valueOf(getRemainingCooldown() / 1000));
+                case COOLDOWN_SET -> Messages.cooldownSet;
+                case COOLDOWN_REMOVED -> Messages.cooldownRemoved;
+                case NO_PERMS -> Messages.noPerms;
+            };
         }
         return null;
     }
